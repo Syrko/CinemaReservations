@@ -4,7 +4,7 @@ import java.util.HashSet;
 
 // Parent class of all types of users of the application.
 // Contains core information, such as user-name and password.
-public class User { //TODO remove abstraction from UML
+public class User {
 	
 	// User types for enumeration
 	public static final String ADMIN = "admin";
