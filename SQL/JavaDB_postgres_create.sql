@@ -74,7 +74,6 @@ CREATE TABLE Reservation (
 	reservationID VARCHAR(255) NOT NULL,
 	provoli VARCHAR(255) NOT NULL,
 	numberOfSeats integer NOT NULL,
-	reservationDate DATE NOT NULL,
 	CONSTRAINT Reservation_pk PRIMARY KEY (reservationID)
 ) WITH (
   OIDS=FALSE
