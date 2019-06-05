@@ -10,10 +10,10 @@ CREATE TABLE "Cinema" (
 
 
 CREATE TABLE "Film" (
-	"filmID" VARCHAR(255) NOT NULL,
-	"filmTitle" VARCHAR(255) NOT NULL,
-	"filmCategory" VARCHAR(255) NOT NULL,
-	"filmDescription" TEXT NOT NULL,
+	"filmID" serial(255) NOT NULL,
+	"filmTitle" serial(255) NOT NULL,
+	"filmCategory" serial(255) NOT NULL,
+	"filmDescription" serial(255) NOT NULL,
 	CONSTRAINT "Film_pk" PRIMARY KEY ("filmID")
 ) WITH (
   OIDS=FALSE
@@ -22,13 +22,13 @@ CREATE TABLE "Film" (
 
 
 CREATE TABLE "Provoli" (
-	"provoliID" VARCHAR(255) NOT NULL,
-	"provoliFilm" VARCHAR(255) NOT NULL,
-	"provoliCinema" VARCHAR(255) NOT NULL,
-	"provoliStartDate" DATE NOT NULL,
-	"provoliEndDate" DATE NOT NULL,
-	"provoliNumberOfReservations" integer NOT NULL,
-	"provoliIsAvailable" BOOLEAN NOT NULL,
+	"provoliID" serial(255) NOT NULL,
+	"provoliFilm" serial(255) NOT NULL,
+	"provoliCinema" serial(255) NOT NULL,
+	"provoliStartDate" serial NOT NULL,
+	"provoliEndDate" serial NOT NULL,
+	"provoliNumberOfReservations" serial NOT NULL,
+	"provoliIsAvailable" serial NOT NULL,
 	CONSTRAINT "Provoli_pk" PRIMARY KEY ("provoliID")
 ) WITH (
   OIDS=FALSE
@@ -37,9 +37,9 @@ CREATE TABLE "Provoli" (
 
 
 CREATE TABLE "Admin" (
-	"username" VARCHAR(255) NOT NULL,
-	"name" VARCHAR(255) NOT NULL,
-	"password" VARCHAR(255) NOT NULL,
+	"username" serial(255) NOT NULL,
+	"name" BINARY NOT NULL,
+	"password" serial(255) NOT NULL,
 	CONSTRAINT "Admin_pk" PRIMARY KEY ("username")
 ) WITH (
   OIDS=FALSE
@@ -48,9 +48,9 @@ CREATE TABLE "Admin" (
 
 
 CREATE TABLE "Customer" (
-	"name" VARCHAR NOT NULL,
-	"username" VARCHAR(255) NOT NULL,
-	"password" VARCHAR(255) NOT NULL,
+	"name" BINARY NOT NULL,
+	"username" serial(255) NOT NULL,
+	"password" serial(255) NOT NULL,
 	"reservation" VARCHAR(255) NOT NULL,
 	CONSTRAINT "Customer_pk" PRIMARY KEY ("username")
 ) WITH (
@@ -60,9 +60,9 @@ CREATE TABLE "Customer" (
 
 
 CREATE TABLE "ContentAdmin" (
-	"name" VARCHAR(255) NOT NULL,
-	"username" VARCHAR(255) NOT NULL,
-	"password" VARCHAR(255) NOT NULL,
+	"name" BINARY NOT NULL,
+	"username" serial(255) NOT NULL,
+	"password" serial(255) NOT NULL,
 	CONSTRAINT "ContentAdmin_pk" PRIMARY KEY ("username")
 ) WITH (
   OIDS=FALSE
@@ -71,7 +71,7 @@ CREATE TABLE "ContentAdmin" (
 
 
 CREATE TABLE "Reservation" (
-	"reservationID" VARCHAR(255) NOT NULL,
+	"reservationID" serial(255) NOT NULL,
 	"provoli" VARCHAR(255) NOT NULL,
 	"numberOfSeats" integer NOT NULL,
 	"reservationDate" DATE NOT NULL,
