@@ -8,11 +8,11 @@ public class MainClass {
 	
 	public static void main(String[] args) {
 		// Creates Customer, Admin, ContentAdmin users and saves them to their respective txt file
-		Customer customer = new Customer("Nikolas", "Trollis", "123");
+		Customer customer = new Customer("Nikolas", "Tollis", "123");
 		customer.writeToFile();
-		Admin admin = new Admin("kostas", "syrko", "****");
+		Admin admin = new Admin("Kostas", "Syrios", "****");
 		admin.writeToFile();
-		ContentAdmin contentAdmin = new ContentAdmin("makis", "OMakis", "fpmm");
+		ContentAdmin contentAdmin = new ContentAdmin("Makis", "Papadopoulos", "fpmm");
 		contentAdmin.writeToFile();
 		
 		// Creates Film, Cinema, Provoli objects and saves them to their respective txt file

@@ -1,7 +1,4 @@
-###################################
-# Ignore everything but src files #
-###################################
-
-/*
-!/src
-!.gitignore
+CinemaReservations_JavaCode\.settings
+CinemaReservations_JavaCode\bin
+CinemaReservations_JavaCode\.classpath
+CinemaReservations_JavaCode\.project
