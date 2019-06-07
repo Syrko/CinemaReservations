@@ -1,0 +1,17 @@
+SELECT username FROM Admin
+
+SELECT password FROM Admin
+
+SELECT username FROM Customer
+
+SELECT password FROM Customer
+
+SELECT username FROM ContentAdmin
+
+SELECT password FROM ContentAdmin
+
+SELECT filmTitle FROM Film
+
+INSERT INTO Film (filmID, filmTitle, filmCategory, filmDescription) VALUES ();
+
+INSERT INTO Provoli (provoliID, provoliFilm, provoliCinema, provoliStartDate, provoliEndDate, provoliNumberOfReservations, provoliIsAvailable) VALUES ( P-5, filmID, cinemaID, ...)

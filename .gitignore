@@ -4,3 +4,5 @@ CinemaReservations_JavaCode\.classpath
 CinemaReservations_JavaCode\.project
 *.txt
 /.metadata
+!SQL Queries.txt
+!DOTO.txt
