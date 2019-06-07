@@ -25,7 +25,7 @@ public class Admin extends User{
 			userType = input.nextLine();
 		}while(!checkUserType(userType));
 
-		//TODO store new users to appropriate data structure
+		// TODO store new users to appropriate data structure
 		// Creates account of the specified type
 		if(userType == User.ADMIN) {
 			new Admin(input.nextLine(), input.nextLine(), input.nextLine());
