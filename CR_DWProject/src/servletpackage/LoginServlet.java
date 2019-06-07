@@ -1,5 +1,7 @@
 package servletpackage;
 
+import databasepackage.Database;
+import auxpackage.*;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -36,7 +38,40 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append(request.getParameter("username"));
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		
+		Pair<Boolean, String> ValidationResult = Database.ValidateCredentials(username, password);
+		if(ValidationResult == null) {
+			// TODO HTML error pop-up
+		}
+		else {
+			if(ValidationResult.getVar1()) {
+				switch(ValidationResult.getVar2()) {
+					case "admin":
+						// TODO Show admin html
+						break;
+					case "contentAdmin":
+						ShowContentAdminHTML();
+						break;
+					case "customer":
+						// TODO Show customer html
+						break;
+					default:
+						//TODO Error pop up
+				}
+			}
+			else {
+				// TODO error for appropriate exception
+				// exception info in ValidationResult.getVar2()
+			}
+		}
 	}
 
+	private HttpServletResponse ShowContentAdminHTML(HttpServletResponse response) {
+		response.getWriter().append("");
+		
+		
+		return response;
+	}
 }
