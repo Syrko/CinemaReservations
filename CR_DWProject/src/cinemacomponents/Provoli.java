@@ -33,6 +33,16 @@ public class Provoli {
 		System.out.println("Availability: " + getProvoliIsAvailable());
 	}
 	
+	public Provoli(String provoliID, Film provoliFilm, Cinema provoliCinema, LocalDate provoliStartDate, LocalDate provoliEndDate, int numberOfReservations, boolean provoliIsAvailable) {
+		setProvoliID(provoliID);
+		setProvoliFilm(provoliFilm);
+		setProvoliCinema(provoliCinema);
+		setProvoliStartDate(provoliStartDate);
+		setProvoliEndDate(provoliEndDate);
+		setProvoliNumberOfReservations(numberOfReservations);
+		setProvoliIsAvailable(provoliIsAvailable);
+	}
+	
 	public void writeToFile() {
 		try {
 			FileWriter fileWriter = new FileWriter(this.getClass().getSimpleName() + ".txt", true);

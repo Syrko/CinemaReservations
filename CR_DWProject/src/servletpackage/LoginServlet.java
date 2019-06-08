@@ -31,8 +31,7 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		
+		response.sendError(HttpServletResponse.SC_FORBIDDEN);
 	}
 
 	/**
@@ -44,7 +43,7 @@ public class LoginServlet extends HttpServlet {
 		
 		Pair<Boolean, String> ValidationResult = Database.ValidateCredentials(username, password);
 		if(ValidationResult == null) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Credentials -1");
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Credentials");
 		}
 		else {
 			if(ValidationResult.getVar1()) {
@@ -54,7 +53,7 @@ public class LoginServlet extends HttpServlet {
 						break;
 					case "contentadmin":
 						request.setAttribute("contentAdmin", new ContentAdmin(Database.getNameOfUser(username, "contentAdmin"), username, password));
-						response.sendRedirect(request.getContextPath() + "/contentAdminServlet");
+						response.sendRedirect(request.getContextPath() + "/ContentAdminServlet");
 						break;
 					case "customer":
 						// TODO Show customer html
@@ -65,7 +64,7 @@ public class LoginServlet extends HttpServlet {
 			}
 			else {
 				String error = ValidationResult.getVar2();
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, error + " @!#@@#$#");
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Error at: " + error);
 			}
 		}
 	}
