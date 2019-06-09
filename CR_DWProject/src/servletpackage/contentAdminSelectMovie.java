@@ -45,7 +45,7 @@ public class contentAdminSelectMovie extends HttpServlet {
 						"</head>" +
 						"<body>" +
 
-						"<form>" +
+						"<form method='get' action='contentAdminAssignMovie'>" +
 						"  <textarea name='details' rows='8' cols='80' style='resize: none;' readonly= 'true';>" + 
 						"Film ID: " + film.getFilmID() + "\nTitle: " + film.getFilmTitle() + "\nCategory: " + film.getFilmCategory() + "\nDescription: " + film.getFilmDescription() + "\n\n");
 						for(Provoli provoli : provoles) {
@@ -58,7 +58,8 @@ public class contentAdminSelectMovie extends HttpServlet {
 						}
 						
 						out.println("	</textarea><br>" +
-						"  <button type='button' value='assign'>Assign</button>" +
+						"	<input type='hidden' name='filmid' value='" + film.getFilmID() + "'>" +
+						"  <input type='submit' value='Create Provoli'>" +
 						"</form>" +
 						"<br><br><br>" +
 						"<button onClick='back()'>Return</button>" + 

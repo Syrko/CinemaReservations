@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.time.LocalDate;
 
 import auxpackage.Pair;
 import cinemacomponents.*;
@@ -123,11 +124,11 @@ public final class Database {
 	public synchronized static void UpdateProvolesAvailability() {
 		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")){
 			{
-				String statement = "UPDATE provoli SET provoliIsAvailable=true WHERE provoliStartDate>now()";
+				String statement = "UPDATE provoli SET provoliIsAvailable=true WHERE provoliStartDate<=now() AND provoliEndDate>=now()";
 				PreparedStatement dbStatement = db.prepareStatement(statement);
 				dbStatement.executeUpdate();}
 			{
-				String statement = "UPDATE provoli SET provoliIsAvailable=false WHERE provoliStartDate<=now()";
+				String statement = "UPDATE provoli SET provoliIsAvailable=false WHERE provoliStartDate>now() AND provoliEndDate<now()";
 				PreparedStatement dbStatement = db.prepareStatement(statement);
 				dbStatement.executeUpdate();
 			}
@@ -175,7 +176,7 @@ public final class Database {
 						id = (ids.get(ids.size()-1)+1);
 						break;
 					}
-					if(counter!=ids.get(counter-1)) {
+					if(!counter.equals(ids.get(counter-1))) {
 						id = counter;
 						break;
 					}
@@ -188,6 +189,71 @@ public final class Database {
 			dbStatement.setString(3, category);
 			dbStatement.setString(4, description);
 			dbStatement.executeQuery();
+		}
+		catch(SQLException e) {
+			System.out.println(e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			return;
+		}
+	}
+	
+	public synchronized static ArrayList<Cinema> getAllCinemas(){
+		ArrayList<Cinema> returnList = new ArrayList<Cinema>();
+		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")){
+			String statement = "SELECT * FROM cinema";
+			PreparedStatement dbStatement = db.prepareStatement(statement);
+			ResultSet rs = dbStatement.executeQuery();
+			while(rs.next()) {
+				Cinema temp = new Cinema(rs.getString("cinemaid"), rs.getBoolean("cinemaIs3D"), rs.getInt("cinemaNumberOfSeats"));
+				returnList.add(temp);
+			}
+			return returnList;
+		}
+		catch(SQLException e) {
+			System.out.println(e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			return null;
+		}
+	}
+	
+	public synchronized static void CreateProvoli(Film film, Cinema cinema, LocalDate start, LocalDate end, Integer numOfReservations, Boolean isAvailable) {
+		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")){
+			
+			
+			Integer id;
+			{
+				String statement = "SELECT provoliid FROM provoli";
+				PreparedStatement dbStatement = db.prepareStatement(statement);
+				ResultSet rs = dbStatement.executeQuery();
+				ArrayList<Integer> ids = new ArrayList<Integer>();
+				while(rs.next()) {
+					ids.add(Integer.parseInt(rs.getString("provoliid").substring(2)));
+				}
+				Collections.sort(ids);
+				Integer counter = 0;
+				while(true) {
+					counter++;
+					if(counter>ids.size()) {
+						id = (ids.get(ids.size()-1)+1);
+						break;
+					}
+					if(!counter.equals(ids.get(counter-1))) {
+						id = counter;
+						break;
+					}
+				}		
+			}
+			
+			String statement = "INSERT INTO provoli VALUES(?, ?, ?, ?, ?, ?, ?)";
+			PreparedStatement dbStatement = db.prepareStatement(statement);
+			dbStatement.setString(1, "P-"+id.toString());
+			dbStatement.setString(2, film.getFilmID());
+			dbStatement.setString(3, cinema.getCinemaID());
+			dbStatement.setDate(4, java.sql.Date.valueOf(start));
+			dbStatement.setDate(5, java.sql.Date.valueOf(end));
+			dbStatement.setInt(6, numOfReservations);
+			dbStatement.setBoolean(7, isAvailable);
+			dbStatement.executeQuery();
+			
+			UpdateProvolesAvailability();
 		}
 		catch(SQLException e) {
 			System.out.println(e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());

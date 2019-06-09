@@ -65,7 +65,7 @@ public class Provoli {
 	
 	// Checks for provoli availability
 	private void updateProvoliAvailability() {
-		if(this.provoliStartDate.isBefore(LocalDate.now()))
+		if(this.provoliStartDate.isBefore(LocalDate.now()) && this.provoliEndDate.isAfter(LocalDate.now()))
 			this.provoliIsAvailable = true;
 		else
 			this.provoliIsAvailable = false;
