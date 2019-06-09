@@ -1,3 +1,0 @@
-Add servlets to class diagram
-Add database class with sql
-Add Batabase class to class diagram
