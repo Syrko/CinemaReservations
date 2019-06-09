@@ -5,13 +5,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import java.util.ArrayList;
-
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 
 import auxpackage.Pair;
-
 import cinemacomponents.*;
 
 public final class Database {
@@ -67,6 +66,7 @@ public final class Database {
 			PreparedStatement dbStatement = db.prepareStatement(statement);
 			dbStatement.setString(1, username);
 			ResultSet rs = dbStatement.executeQuery();
+			rs.next();
 			return rs.getString("name");
 		}
 		catch(SQLException e) {
@@ -90,28 +90,14 @@ public final class Database {
 			return null;
 		}
 	}
-	public synchronized static ArrayList<Provoli> getFilmProvoles(Film film) {
-		ArrayList<Provoli> provoles = new ArrayList<Provoli>();
-		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")) {
-			String statement = "SELECT * FROM provoli WHERE provoliFilm=" + film.getFilmID(); 
-			PreparedStatement dbStatement = db.prepareStatement(statement);
-			ResultSet rs = dbStatement.executeQuery();
-			while(rs.next()) {
-				Provoli temp = new Provoli(rs.getString("provoliId"), getFilm(rs.getString("provoliFilm")), getCinema(rs.getString("provoliCinema")), rs.getDate("provoliStartDate").toLocalDate(), rs.getDate("provoliEndDate").toLocalDate(), rs.getInt("provoliNumberOfReservations"), rs.getBoolean("provoliIsAvailable"));
-				provoles.add(temp);
-			}
-			return provoles;
-		}
-		catch(SQLException e) {
-			return null;
-		}
-	}
 	
 	public synchronized static Cinema getCinema(String cinemaID) {
 		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")) {
-			String statement = "SELECT * FROM cinema WHERE cinemaId=" + cinemaID; 
+			String statement = "SELECT * FROM cinema WHERE cinemaId=?"; 
 			PreparedStatement dbStatement = db.prepareStatement(statement);
+			dbStatement.setString(1, cinemaID);
 			ResultSet rs = dbStatement.executeQuery();
+			rs.next();
 			return new Cinema(rs.getString("cinemaId"), rs.getBoolean("cinemaIs3D"), rs.getInt("cinemaNumberOfSeats"));
 		}
 		catch(SQLException e) {
@@ -121,13 +107,91 @@ public final class Database {
 	
 	public synchronized static Film getFilm(String filmID) {
 		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")) {
-			String statement = "SELECT * FROM film WHERE filmId=" + filmID; 
+			String statement = "SELECT * FROM film WHERE filmid=?"; 
 			PreparedStatement dbStatement = db.prepareStatement(statement);
+			dbStatement.setString(1, filmID);
 			ResultSet rs = dbStatement.executeQuery();
-			return new Film(rs.getString("filmId"), rs.getString("filmTitle"), rs.getString("filmCategory"), rs.getString("filmDescription"));
+			rs.next();
+			return new Film(rs.getString("filmid"), rs.getString("filmtitle"), rs.getString("filmcategory"), rs.getString("filmdescription"));
 		}
 		catch(SQLException e) {
+			System.out.println(e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
 			return null;
+		}
+	}
+	
+	public synchronized static void UpdateProvolesAvailability() {
+		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")){
+			{
+				String statement = "UPDATE provoli SET provoliIsAvailable=true WHERE provoliStartDate>now()";
+				PreparedStatement dbStatement = db.prepareStatement(statement);
+				dbStatement.executeUpdate();}
+			{
+				String statement = "UPDATE provoli SET provoliIsAvailable=false WHERE provoliStartDate<=now()";
+				PreparedStatement dbStatement = db.prepareStatement(statement);
+				dbStatement.executeUpdate();
+			}
+		}
+		catch(SQLException e) {
+			System.out.println(e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			return;
+		}
+	}
+	public synchronized static ArrayList<Provoli> getProvolesForFilm(Film film){
+		UpdateProvolesAvailability();
+		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")) {
+			ArrayList<Provoli> returnList = new ArrayList<Provoli>();
+			String statement = "SELECT * FROM provoli WHERE provoliFilm=?"; 
+			PreparedStatement dbStatement = db.prepareStatement(statement);
+			dbStatement.setString(1, film.getFilmID());
+			ResultSet rs = dbStatement.executeQuery();
+			while(rs.next()) {
+				returnList.add(new Provoli(rs.getString("provoliId"), film, getCinema(rs.getString("provoliCinema")), rs.getDate("provoliStartDate").toLocalDate(), rs.getDate("provoliEndDate").toLocalDate(), rs.getInt("provoliNumberOfReservations"), rs.getBoolean("provoliIsAvailable")));
+			}
+			return returnList;
+		}
+		catch(SQLException e) {
+			System.out.println(e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			return null;
+		}
+	}
+	
+	public synchronized static void CreateFilm(String title, String category, String description) {
+		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")) {
+			Integer id;
+			{
+				String statement = "SELECT filmid FROM film";
+				PreparedStatement dbStatement = db.prepareStatement(statement);
+				ResultSet rs = dbStatement.executeQuery();
+				ArrayList<Integer> ids = new ArrayList<Integer>();
+				while(rs.next()) {
+					ids.add(Integer.parseInt(rs.getString("filmid").substring(2)));
+				}
+				Collections.sort(ids);
+				Integer counter = 0;
+				while(true) {
+					counter++;
+					if(counter>ids.size()) {
+						id = (ids.get(ids.size()-1)+1);
+						break;
+					}
+					if(counter!=ids.get(counter-1)) {
+						id = counter;
+						break;
+					}
+				}
+			}
+			String statement = "INSERT INTO film VALUES(?, ?, ?, ?)";
+			PreparedStatement dbStatement = db.prepareStatement(statement);
+			dbStatement.setString(1, "F-"+id.toString());
+			dbStatement.setString(2, title);
+			dbStatement.setString(3, category);
+			dbStatement.setString(4, description);
+			dbStatement.executeQuery();
+		}
+		catch(SQLException e) {
+			System.out.println(e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			return;
 		}
 	}
 }
