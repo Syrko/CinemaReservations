@@ -1,4 +1,4 @@
-package servletpackage_contentadmin;
+package servletpackage_general;
 
 import databasepackage.Database;
 import auxpackage.*;
