@@ -72,6 +72,7 @@ public class contentAdminSelectMovie extends HttpServlet {
 						"<br><br>" + 
 						"<form method='get' action='deleteProvoliServlet'>" +
 						"<input type='submit' name='deleteProv' value='Delete Provoli'>" +
+						"<input type='hidden' name='movieID' value='" + film.getFilmID() + "'>" +
 						"</form><br>" +
 						"<form method='get' action='deleteMovieServlet'>" +
 						"<input type='submit' name='delete' value='Delete Movie'>" +

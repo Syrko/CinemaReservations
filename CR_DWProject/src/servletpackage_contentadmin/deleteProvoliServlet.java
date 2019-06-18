@@ -2,6 +2,7 @@ package servletpackage_contentadmin;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,20 +11,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import auxpackage.*;
+import auxpackage.CookieManager;
+import cinemacomponents.*;
 import databasepackage.*;
-import cinemacomponents.Film;
+
 /**
- * Servlet implementation class deleteMovieServlet
+ * Servlet implementation class deleteProvoliServlet
  */
-@WebServlet("/deleteMovieServlet")
-public class deleteMovieServlet extends HttpServlet {
+@WebServlet("/deleteProvoliServlet")
+public class deleteProvoliServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public deleteMovieServlet() {
+    public deleteProvoliServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -39,46 +41,44 @@ public class deleteMovieServlet extends HttpServlet {
 		}
 		
 		Film film = Database.getFilm(request.getParameter("movieID"));
-		int result = Database.deleteFilm(film);
+		ArrayList<Provoli> provoles = Database.getProvolesForFilm(film);
+		
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
-		
-		if(result == 1) {
-			out.println(
-					"<!DOCTYPE html>" +
-							"<html>" +
-							"<head>" +
-							"  <title> Movie Deletion...</title>" +
-							"</head>" +
-							"<body>" +
-							"  <form method='post' action='ContentAdminServlet'> "+
-							"     <h1> Movie was not deleted!<br> It still has provoles!</h1>" +
-							"    <input type='submit' value='OK'>" +
-							"  </form>" +
-							"<form style='position:fixed;left:5%;bottom:10%;width:10%;' method='post' action='LogoutServlet'>" +
-							"  <input type='submit' name='logout' value='Logout'>" +
-							"</form>" +
-							"</body>" +
-							"</html>");
-			return;
-		}
 		
 		out.println(
 				"<!DOCTYPE html>" +
 						"<html>" +
 						"<head>" +
-						"  <title> Movie Deleted...</title>" +
+						"<title>Delete Provoli</title>" +
 						"</head>" +
-						"<body>" +
-						"  <form method='post' action='ContentAdminServlet'> "+
-						"     <h1> Movie Deleted Successfully! </h1>" +
-						"    <input type='submit' value='OK'>" +
-						"  </form>" +
-						"<form style='position:fixed;left:5%;bottom:10%;width:10%;' method='post' action='LogoutServlet'>" +
-						"  <input type='submit' name='logout' value='Logout'>" +
-						"</form>" +
-						"</body>" +
-						"</html>");
+
+						"<body style='margin-left:20px;'>" +
+						"<form method='get' action = 'deletingProvoli'>");
+		if(provoles.isEmpty() || provoles == null) {
+			out.println(
+					"<h1>No provoles available for the film " + film.getFilmTitle() + "</h1>");
+		}
+		else {
+			out.println("<h1>Choose a Provoli from Movie: "+ film.getFilmTitle() +" to Delete:</h1>");
+			out.println("<select name='provoles'>");
+			for(Provoli prov : provoles) {
+				out.println("<option value='" + prov.getProvoliID() + "'>" + prov.getProvoliID() + " </option>");
+			}
+			out.println("</select>");
+			out.println("<input type='submit' value='Delete' style='margin-left:5px;'>");
+		}
+		out.println(
+					"<input type='button' value='Return' onclick='goBack()'>" +
+				"</form>" +
+				"<form style='position:fixed;left:5%;bottom:10%;width:10%;' method='post' action='LogoutServlet'>" +
+				"  <input type='submit' name='logout' value='Logout'>" +
+				"<script>" +
+				"function goBack(){" +
+				"  window.history.back();}" +
+				"</script>" +
+				"</body>" +
+				"</html>");
 	}
 
 	/**

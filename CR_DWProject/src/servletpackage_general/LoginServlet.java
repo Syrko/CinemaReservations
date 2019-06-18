@@ -2,7 +2,6 @@ package servletpackage_general;
 
 import databasepackage.Database;
 import auxpackage.*;
-import userspackage.*;
 
 import java.io.IOException;
 

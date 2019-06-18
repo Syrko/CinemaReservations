@@ -22,7 +22,7 @@ public final class Database {
 			
 			for(String table : tables) {
 				String statement = "SELECT username FROM " + table;
-				PreparedStatement dbStatement = db.prepareStatement(statement);
+				PreparedStatement dbStatement = db.prepareStatement(statement); 
 				ResultSet rs = dbStatement.executeQuery();
 				String validUsername = null;
 				
@@ -116,7 +116,7 @@ public final class Database {
 			return new Film(rs.getString("filmid"), rs.getString("filmtitle"), rs.getString("filmcategory"), rs.getString("filmdescription"));
 		}
 		catch(SQLException e) {
-			System.out.println(e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			System.out.println("getFILM: " + e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
 			return null;
 		}
 	}
@@ -134,7 +134,7 @@ public final class Database {
 			}
 		}
 		catch(SQLException e) {
-			System.out.println(e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			System.out.println("ProvUpdAv: " + e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
 			return;
 		}
 	}
@@ -152,7 +152,7 @@ public final class Database {
 			return returnList;
 		}
 		catch(SQLException e) {
-			System.out.println(e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			System.out.println("getProvForFilm: " + e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
 			return null;
 		}
 	}
@@ -188,10 +188,10 @@ public final class Database {
 			dbStatement.setString(2, title);
 			dbStatement.setString(3, category);
 			dbStatement.setString(4, description);
-			dbStatement.executeQuery();
+			dbStatement.executeUpdate();
 		}
 		catch(SQLException e) {
-			System.out.println(e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			System.out.println("Create film: " + e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
 			return;
 		}
 	}
@@ -209,7 +209,7 @@ public final class Database {
 			return returnList;
 		}
 		catch(SQLException e) {
-			System.out.println(e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			System.out.println("GetAllCinemas: " + e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
 			return null;
 		}
 	}
@@ -251,26 +251,59 @@ public final class Database {
 			dbStatement.setDate(5, java.sql.Date.valueOf(end));
 			dbStatement.setInt(6, numOfReservations);
 			dbStatement.setBoolean(7, isAvailable);
-			dbStatement.executeQuery();
+			dbStatement.executeUpdate();
 			
 			UpdateProvolesAvailability();
 		}
 		catch(SQLException e) {
-			System.out.println(e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			System.out.println("CreateProvoli: " + e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
 			return;
 		}
 	}
 	
-	public synchronized static void deleteFilm(Film film) {
+	public synchronized static int deleteFilm(Film film) {
 		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")) {
 			String statement = "DELETE FROM film WHERE filmid=?"; 
 			PreparedStatement dbStatement = db.prepareStatement(statement);
 			dbStatement.setString(1, film.getFilmID());
-			ResultSet rs = dbStatement.executeQuery();
+			dbStatement.executeUpdate();
+			return 0;
 		}
 		catch(SQLException e) {
-			System.out.println("Exception: " + e.getCause());
+			System.out.println("Exception DeleteFilm: " + e.getCause() + " -- " + e.getMessage() + " -- " + " -- " + e.getSQLState() + " -- " + e.getLocalizedMessage());
+			if(e.getErrorCode()==0) {
+				return 1;
+			}
+			return -1;
+		}
+	}
+	
+	public synchronized static void deleteProvoli(Provoli prov) {
+		UpdateProvolesAvailability();
+		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")) {
+			String statement = "DELETE FROM provoli WHERE provoliid=?"; 
+			PreparedStatement dbStatement = db.prepareStatement(statement);
+			dbStatement.setString(1, prov.getProvoliID());
+			dbStatement.executeUpdate();
+		}
+		catch(SQLException e) {
+			System.out.println("Exception DeleteProvoli: " + e.getCause() + " -- " + e.getMessage() + " -- " + e.getSQLState() + " -- " + e.getLocalizedMessage()+  " -- " + e.getNextException().toString() );
 			return;
+		}
+	}
+	
+	public synchronized static Provoli getProvoli(String provoliID) {
+		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")) {
+			String statement = "SELECT * FROM provoli WHERE provoliid=?"; 
+			PreparedStatement dbStatement = db.prepareStatement(statement);
+			dbStatement.setString(1, provoliID);
+			ResultSet rs = dbStatement.executeQuery();
+			rs.next();
+			return new Provoli(rs.getString("provoliid"),Database.getFilm(rs.getString("provolifilm")), Database.getCinema(rs.getString("provolicinema")), rs.getDate("provoliStartDate").toLocalDate(), rs.getDate("provoliEndDate").toLocalDate(), rs.getInt("provoliNumberOfReservations"), rs.getBoolean("provoliIsAvailable"));
+		}
+		catch(SQLException e) {
+			System.out.println("GetProvoli: " + e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			return null;
 		}
 	}
 }

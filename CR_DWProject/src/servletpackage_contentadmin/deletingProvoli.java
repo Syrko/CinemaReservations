@@ -10,20 +10,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import auxpackage.*;
+import auxpackage.CookieManager;
+import cinemacomponents.*;
 import databasepackage.*;
-import cinemacomponents.Film;
+
 /**
- * Servlet implementation class deleteMovieServlet
+ * Servlet implementation class deletingProvoli
  */
-@WebServlet("/deleteMovieServlet")
-public class deleteMovieServlet extends HttpServlet {
+@WebServlet("/deletingProvoli")
+public class deletingProvoli extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public deleteMovieServlet() {
+    public deletingProvoli() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -38,40 +39,20 @@ public class deleteMovieServlet extends HttpServlet {
 			return;
 		}
 		
-		Film film = Database.getFilm(request.getParameter("movieID"));
-		int result = Database.deleteFilm(film);
+		Provoli prov = Database.getProvoli(request.getParameter("provoles"));
+		Database.deleteProvoli(prov);
+		
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
-		
-		if(result == 1) {
-			out.println(
-					"<!DOCTYPE html>" +
-							"<html>" +
-							"<head>" +
-							"  <title> Movie Deletion...</title>" +
-							"</head>" +
-							"<body>" +
-							"  <form method='post' action='ContentAdminServlet'> "+
-							"     <h1> Movie was not deleted!<br> It still has provoles!</h1>" +
-							"    <input type='submit' value='OK'>" +
-							"  </form>" +
-							"<form style='position:fixed;left:5%;bottom:10%;width:10%;' method='post' action='LogoutServlet'>" +
-							"  <input type='submit' name='logout' value='Logout'>" +
-							"</form>" +
-							"</body>" +
-							"</html>");
-			return;
-		}
-		
 		out.println(
 				"<!DOCTYPE html>" +
 						"<html>" +
 						"<head>" +
-						"  <title> Movie Deleted...</title>" +
+						"  <title> Provoli Deleted...</title>" +
 						"</head>" +
 						"<body>" +
 						"  <form method='post' action='ContentAdminServlet'> "+
-						"     <h1> Movie Deleted Successfully! </h1>" +
+						"     <h1> Provoli Deleted Successfully! </h1>" +
 						"    <input type='submit' value='OK'>" +
 						"  </form>" +
 						"<form style='position:fixed;left:5%;bottom:10%;width:10%;' method='post' action='LogoutServlet'>" +
