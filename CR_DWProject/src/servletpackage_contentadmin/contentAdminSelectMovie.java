@@ -1,4 +1,4 @@
-package servletpackage;
+package servletpackage_contentadmin;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -6,10 +6,12 @@ import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import auxpackage.CookieManager;
 import cinemacomponents.*;
 import databasepackage.Database;
 
@@ -32,6 +34,12 @@ public class contentAdminSelectMovie extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Cookie[] cookies = CookieManager.getCookies(request);
+		if(cookies == null) {
+			response.sendError(HttpServletResponse.SC_FORBIDDEN);
+			return;
+		}
+		
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		Film film = Database.getFilm(request.getParameter("movies"));
@@ -61,8 +69,19 @@ public class contentAdminSelectMovie extends HttpServlet {
 						"	<input type='hidden' name='filmid' value='" + film.getFilmID() + "'>" +
 						"  <input type='submit' value='Create Provoli'>" +
 						"</form>" +
+						"<br><br>" + 
+						"<form method='get' action='deleteProvoliServlet'>" +
+						"<input type='submit' name='deleteProv' value='Delete Provoli'>" +
+						"</form><br>" +
+						"<form method='get' action='deleteMovieServlet'>" +
+						"<input type='submit' name='delete' value='Delete Movie'>" +
+						"<input type='hidden' name='movieID' value='" + film.getFilmID() + "'>" +
+						"</form>" +
 						"<br><br><br>" +
-						"<button onClick='back()'>Return</button>" + 
+						"<button onClick='back()'>Return</button>" +
+						"<form style='position:fixed;left:5%;bottom:10%;width:10%;' method='post' action='LogoutServlet'>" +
+						"  <input type='submit' name='logout' value='Logout'>" +
+						"</form>" +
 						"<script>" +
 						"function back() {" +
 						"  window.history.back();" +

@@ -1,19 +1,19 @@
-package servletpackage;
+package servletpackage_contentadmin;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-
 import java.util.ArrayList;
-
-import cinemacomponents.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cinemacomponents.Film;
 import databasepackage.Database;
+import auxpackage.CookieManager;
 
 /**
  * Servlet implementation class ContentAdminServlet
@@ -47,6 +47,12 @@ public class ContentAdminServlet extends HttpServlet {
 	private void ShowContentAdmBasic(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException 
 	{
+		Cookie[] cookies = CookieManager.getCookies(request);
+		if(cookies == null) {
+			response.sendError(HttpServletResponse.SC_FORBIDDEN);
+			return;
+		}
+		
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		out.println(
@@ -54,7 +60,8 @@ public class ContentAdminServlet extends HttpServlet {
 				"<html>" +
 				"<head>" +
 				"	<title>Content Admin</title>" +
-				"	<h1>Content Admin</h1>" +
+				"	<h1>Welcome, " + cookies[0].getValue() + "!"+ 
+				"	<br>You are in the Content Admin page!</h1>" +
 				"	<style>" +
 				"	</style>" +
 				"</head>" +
@@ -73,6 +80,9 @@ public class ContentAdminServlet extends HttpServlet {
 				"	<form action='contentAdminAddMovie' method='post'>" +
 				"		<input type='submit' value='Add Movie'>" +
 				"	</form>" +
+				"<form style='position:fixed;left:5%;bottom:10%;width:10%;' method='post' action='LogoutServlet'>" +
+				"  <input type='submit' name='logout' value='Logout'>" +
+				"</form>" +
 				"</body>" +
 				"</html>");		
 	}

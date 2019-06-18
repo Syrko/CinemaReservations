@@ -260,4 +260,17 @@ public final class Database {
 			return;
 		}
 	}
+	
+	public synchronized static void deleteFilm(Film film) {
+		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")) {
+			String statement = "DELETE FROM film WHERE filmid=?"; 
+			PreparedStatement dbStatement = db.prepareStatement(statement);
+			dbStatement.setString(1, film.getFilmID());
+			ResultSet rs = dbStatement.executeQuery();
+		}
+		catch(SQLException e) {
+			System.out.println("Exception: " + e.getCause());
+			return;
+		}
+	}
 }

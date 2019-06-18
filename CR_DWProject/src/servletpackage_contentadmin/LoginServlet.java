@@ -1,4 +1,4 @@
-package servletpackage;
+package servletpackage_contentadmin;
 
 import databasepackage.Database;
 import auxpackage.*;
@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Cookie;
 
 /**
  * Servlet implementation class LoginServlet
@@ -52,7 +53,7 @@ public class LoginServlet extends HttpServlet {
 						// TODO Show admin html
 						break;
 					case "contentadmin":
-						request.setAttribute("contentAdmin", new ContentAdmin(Database.getNameOfUser(username, "contentAdmin"), username, password));
+						response.addCookie(new Cookie("username", username));
 						response.sendRedirect(request.getContextPath() + "/ContentAdminServlet");
 						break;
 					case "customer":

@@ -1,4 +1,4 @@
-package servletpackage;
+package servletpackage_contentadmin;
 
 import java.io.IOException;
 import javax.servlet.ServletException;

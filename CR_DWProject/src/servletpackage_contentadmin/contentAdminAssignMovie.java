@@ -1,4 +1,4 @@
-package servletpackage;
+package servletpackage_contentadmin;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,9 +9,12 @@ import databasepackage.Database;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import auxpackage.CookieManager;
 
 /**
  * Servlet implementation class contentAdminAssignMovie
@@ -32,6 +35,12 @@ public class contentAdminAssignMovie extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Cookie[] cookies = CookieManager.getCookies(request);
+		if(cookies == null) {
+			response.sendError(HttpServletResponse.SC_FORBIDDEN);
+			return;
+		}
+		
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		
@@ -82,7 +91,9 @@ public class contentAdminAssignMovie extends HttpServlet {
 								"  }" +
 								"  document.getElementById('start').defaultValue = y + '-' + m + '-' +  d;" +
 								"</script>" +
-
+								"<form style='position:fixed;left:5%;bottom:10%;width:10%;' method='post' action='LogoutServlet'>" +
+								"  <input type='submit' name='logout' value='Logout'>" +
+								"</form>" +
 								"</body>" +
 								"</html>");
 	}
