@@ -33,7 +33,7 @@ public class contentAdminAddMovie extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		Cookie[] cookies = CookieManager.getCookies(request);
-		if(cookies == null) {
+		if(cookies == null || !cookies[1].getValue().equals("contentAdmin")) {
 			response.sendError(HttpServletResponse.SC_FORBIDDEN);
 			return;
 		}
@@ -53,11 +53,11 @@ public class contentAdminAddMovie extends HttpServlet {
 
 						"<form action='addingMovie' method='get'>" +
 						"  Movie Title:<br>" +
-						"  <input type='text' name='filmTitle'><br>" +
+						"  <input type='text' name='filmTitle' required><br>" +
 						"  Movie Category:<br>" +
-						"  <input type='text' name='filmCategory'><br>" +
+						"  <input type='text' name='filmCategory' required><br>" +
 						"  Movie Description:<br>" +
-						"  <input type='text' name='filmDescription'>" +
+						"  <input type='text' name='filmDescription' required>" +
 						"  <br>" +
 						"  <br>" +
 						"  <input type='reset' value='Clear'>" +

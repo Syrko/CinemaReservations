@@ -49,14 +49,19 @@ public class LoginServlet extends HttpServlet {
 			if(ValidationResult.getVar1()) {
 				switch(ValidationResult.getVar2()) {
 					case "admin":
-						// TODO Show admin html
+						response.addCookie(new Cookie("username", username));
+						response.addCookie(new Cookie("usertype", "admin"));
+						response.sendRedirect(request.getContextPath() + "/AdminServlet");
 						break;
 					case "contentadmin":
 						response.addCookie(new Cookie("username", username));
+						response.addCookie(new Cookie("usertype", "contentAdmin"));
 						response.sendRedirect(request.getContextPath() + "/ContentAdminServlet");
 						break;
 					case "customer":
-						// TODO Show customer html
+						response.addCookie(new Cookie("username", username));
+						response.addCookie(new Cookie("usertype", "customer"));
+						response.sendRedirect(request.getContextPath() + "/CustomerServlet");
 						break;
 					default:
 						response.sendError(HttpServletResponse.SC_BAD_REQUEST);

@@ -5,8 +5,6 @@ import java.io.PrintWriter;
 import cinemacomponents.Film;
 
 public class Customer extends User {
-
-	private Reservation reservation;
 	
 	// Constructor
 	public Customer(String name, String username, String password) {

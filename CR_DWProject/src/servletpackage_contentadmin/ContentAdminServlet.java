@@ -48,7 +48,8 @@ public class ContentAdminServlet extends HttpServlet {
 			throws ServletException, IOException 
 	{
 		Cookie[] cookies = CookieManager.getCookies(request);
-		if(cookies == null) {
+		if(cookies == null || !cookies[1].getValue().equals("contentAdmin")) {
+			System.out.println(cookies[1].getValue());
 			response.sendError(HttpServletResponse.SC_FORBIDDEN);
 			return;
 		}
@@ -60,8 +61,8 @@ public class ContentAdminServlet extends HttpServlet {
 				"<html>" +
 				"<head>" +
 				"	<title>Content Admin</title>" +
-				"	<h1>Welcome, " + cookies[0].getValue() + "!"+ 
-				"	<br>You are in the Content Admin page!</h1>" +
+				"	<h1>Welcome, " + cookies[0].getValue() + "!</h1>" + 
+				"	<h2>You are in the Content Admin page!</h2><br>" +
 				"	<style>" +
 				"	</style>" +
 				"</head>" +

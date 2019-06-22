@@ -7,7 +7,6 @@
 <fullyQualifiedTypeName name="java.util.Dictionary"/>
 <fullyQualifiedTypeName name="java.util.Map.Entry"/>
 <fullyQualifiedTypeName name="cinemacomponents.Cinema"/>
-<fullyQualifiedTypeName name="java.sql.ResultSet"/>
 <fullyQualifiedTypeName name="java.util.Date"/>
 <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
 <fullyQualifiedTypeName name="java.util.Collections"/>
@@ -20,4 +19,5 @@
 <fullyQualifiedTypeName name="auxpackage.CookieManager"/>
 <fullyQualifiedTypeName name="cinemacomponents.Film"/>
 <fullyQualifiedTypeName name="databasepackage.Database"/>
+<fullyQualifiedTypeName name="java.sql.ResultSet"/>
 </qualifiedTypeNameHistroy>

@@ -35,7 +35,7 @@ public class contentAdminSelectMovie extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Cookie[] cookies = CookieManager.getCookies(request);
-		if(cookies == null) {
+		if(cookies == null || !cookies[1].getValue().equals("contentAdmin")) {
 			response.sendError(HttpServletResponse.SC_FORBIDDEN);
 			return;
 		}

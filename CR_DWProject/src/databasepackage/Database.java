@@ -13,6 +13,7 @@ import java.time.LocalDate;
 
 import auxpackage.Pair;
 import cinemacomponents.*;
+import userspackage.*;
 
 public final class Database {
 
@@ -305,5 +306,157 @@ public final class Database {
 			System.out.println("GetProvoli: " + e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
 			return null;
 		}
+	}
+	
+	public synchronized static String userExists(String username) {
+		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")) {
+			String statement = "SELECT * FROM contentadmin WHERE username=?"; 
+			PreparedStatement dbStatement = db.prepareStatement(statement);
+			dbStatement.setString(1, username);
+			ResultSet rs = dbStatement.executeQuery();
+			if(rs.next()) {
+				return "contentadmin";
+			}
+			else {
+				statement = "SELECT * FROM customer WHERE username=?"; 
+				dbStatement = db.prepareStatement(statement);
+				dbStatement.setString(1, username);
+				rs = dbStatement.executeQuery();
+				if(rs.next()) {
+					return "customer";
+				}
+				else
+					return "&no_user";
+			}
+//			String user = rs.getString("username");
+//			if(user.equals(null)) {
+//				statement = "SELECT * FROM customer WHERE username=?"; 
+//				dbStatement = db.prepareStatement(statement);
+//				dbStatement.setString(1, username);
+//				rs = dbStatement.executeQuery();
+//				rs.next();
+//				user = rs.getString("username");
+//				if(user.equals(null)) {
+//					return "&no_user";
+//				}
+//				else {
+//					return "customer";
+//				}
+//			}
+//			else{
+//				return "contentadmin";
+//			}
+		}
+		catch(SQLException e) {
+			System.out.println("userExists: " + e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			return null;
+		}
+	}
+	
+	public synchronized static boolean CreateUser(User user, String usertype) {
+		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")) {
+			if(usernameExists(user.getUsername())){
+				return false;
+			}
+			
+			String statement = "INSERT INTO " + usertype + " VALUES(?, ?, ?)"; 
+			PreparedStatement dbStatement = db.prepareStatement(statement);
+			dbStatement.setString(1, user.getName());
+			dbStatement.setString(2, user.getUsername());
+			dbStatement.setString(3, user.getPassword());
+			dbStatement.executeUpdate();
+			return true;
+		}
+		catch(SQLException e) {
+			System.out.println("CreateUser: " + e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			return false;
+		}
+		
+	}
+	
+	public synchronized static void DeleteUser(User user, String usertype) {
+		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")) {
+			{
+				String statement = "DELETE FROM reservation WHERE customer=?"; 
+				PreparedStatement dbStatement = db.prepareStatement(statement);
+				dbStatement.setString(1, user.getUsername());
+				dbStatement.executeUpdate();
+			}
+			String statement = "DELETE FROM " + usertype + " WHERE username=?"; 
+			PreparedStatement dbStatement = db.prepareStatement(statement);
+			dbStatement.setString(1, user.getUsername());
+			dbStatement.executeUpdate();
+		}
+		catch(SQLException e) {
+			System.out.println("DeleteUser: " + e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			return;
+		}
+		
+	}
+	
+	public synchronized static boolean EditUser(User user, String oldUsername, String usertype) {
+		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")) {
+			if(usernameExists(user.getUsername())){
+				return false;
+			}
+			
+			{
+				String statement = "UPDATE reservation SET customer=? WHERE customer=?"; 
+				PreparedStatement dbStatement = db.prepareStatement(statement);
+				dbStatement.setString(1, user.getUsername());
+				dbStatement.setString(2, oldUsername);
+				dbStatement.executeUpdate();
+			}
+			String statement = "UPDATE " + usertype + " SET name=?,username=?,password=? WHERE username=?"; 
+			PreparedStatement dbStatement = db.prepareStatement(statement);
+			dbStatement.setString(1, user.getName());
+			dbStatement.setString(2, user.getUsername());
+			dbStatement.setString(3, user.getPassword());
+			dbStatement.setString(4, oldUsername);
+			dbStatement.executeUpdate();
+			return true;
+		}
+		catch(SQLException e) {
+			System.out.println("EditUser: " + e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			return false;
+		}
+		
+	}
+	
+	public synchronized static User getUser(String username, String usertype) {
+		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")) {
+			String statement = "SELECT * FROM " + usertype + " WHERE username=?"; 
+			PreparedStatement dbStatement = db.prepareStatement(statement);
+			dbStatement.setString(1, username);
+			ResultSet rs = dbStatement.executeQuery();
+			rs.next();
+			if(usertype.equals("customer")) {
+				return new Customer(rs.getString("name"), rs.getString("username"), rs.getString("password"));
+			}
+			else if(usertype.equals("contentadmin")){
+				return new ContentAdmin(rs.getString("name"), rs.getString("username"), rs.getString("password"));
+			}
+			else
+				return null;
+		}
+		catch(SQLException e) {
+			System.out.println("GetUser: " + e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			return null;
+		}
+	}
+	
+	public synchronized static boolean usernameExists(String username) {
+		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")) {
+			String statement = "SELECT username FROM(SELECT username FROM ((SELECT username AS username FROM admin) UNION (SELECT username AS username FROM customer) UNION (SELECT username AS username FROM contentadmin))as results) as results WHERE username=?"; 
+			PreparedStatement dbStatement = db.prepareStatement(statement);
+			dbStatement.setString(1, username);
+			ResultSet rs = dbStatement.executeQuery();
+			return rs.next();
+		}
+		catch(SQLException e) {
+			System.out.println("UsernameExists: " + e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			return false;
+		}
+		
 	}
 }
