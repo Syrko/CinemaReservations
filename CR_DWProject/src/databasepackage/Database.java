@@ -390,10 +390,7 @@ public final class Database {
 	
 	public synchronized static boolean EditUser(User user, String oldUsername, String usertype) {
 		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")) {
-			if(usernameExists(user.getUsername())){
-				return false;
-			}
-			
+						
 			{
 				String statement = "UPDATE reservation SET customer=? WHERE customer=?"; 
 				PreparedStatement dbStatement = db.prepareStatement(statement);

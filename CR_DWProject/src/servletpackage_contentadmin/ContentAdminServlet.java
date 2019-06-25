@@ -77,7 +77,7 @@ public class ContentAdminServlet extends HttpServlet {
 				"  margin-bottom: 5px;"+
 				"}"+
 				".Buttons:hover {background-color: #950740; cursor: pointer;}"+
-				".Buttons{background-color: #C3073F; color: white; padding: 10px; font-size: 14px; border: none; margin-bottom: 80px; width:auto; height: auto;}"+
+				".Buttons{background-color: #C3073F; color: white; padding: 10px; font-size: 14px; border: none; margin-bottom: 80px; margin-left:10px; width:auto; height: auto;}"+
 				"form{margin-left:30px;}"+
 				"h1{border: none; padding: 2%; color:white; background-color: #6F2232; min-height: 20px; font-size: 33px;}"+
 				"	</style>" +

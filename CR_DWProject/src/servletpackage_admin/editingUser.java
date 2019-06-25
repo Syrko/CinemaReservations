@@ -43,7 +43,7 @@ public class editingUser extends HttpServlet {
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		boolean editingFlag = false;
-		if(request.getParameter("usertype").equals("contentadmin")) {
+		if(request.getParameter("usertype").toLowerCase().equals("contentadmin")) {
 			ContentAdmin user = new ContentAdmin(request.getParameter("name"),request.getParameter("username"), request.getParameter("password"));
 			editingFlag = Database.EditUser(user, request.getParameter("oldUsername"), request.getParameter("usertype"));
 		}
@@ -71,7 +71,7 @@ public class editingUser extends HttpServlet {
 						"<body>" +
 						"  <form method='post' action='AdminServlet'> "+
 						"     <h1> User Edited Successfully! </h1>" +
-						"    <input type='submit' value='OK' class='Buttons'>>" +
+						"    <input type='submit' value='OK' class='Buttons'>" +
 						"  </form>" +
 						"<form style='position:fixed;left:5%;bottom:10%;width:10%;' method='post' action='LogoutServlet'>" +
 						"  <input type='submit' name='logout' value='Logout' class='Buttons'>" +
@@ -98,10 +98,10 @@ public class editingUser extends HttpServlet {
 							"<body>" +
 							"  <form method='post' action='AdminServlet'> "+
 							"     <h1> User was not edited! </h1>" +
-							"    <input type='submit' value='OK' class='Buttons'>>" +
+							"    <input type='submit' value='OK' class='Buttons'>" +
 							"  </form>" +
 							"<form style='position:fixed;bottom:10%;width:10%;' method='post' action='LogoutServlet'>" +
-							"  <input type='submit' name='logout' value='Logout' class='Buttons'>>" +
+							"  <input type='submit' name='logout' value='Logout' class='Buttons'>" +
 							"</form>" +
 							"</body>" +
 							"</html>");

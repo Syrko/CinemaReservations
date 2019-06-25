@@ -70,7 +70,7 @@ public class AdminServlet extends HttpServlet {
 						"form{margin-left:30px;}"+
 						"h1{border: none; padding: 2%; color:white; background-color: #6F2232; min-height: 20px; font-size: 33px;}"+
 						"h2{margin-left: 15px;}"+
-						"</style>"
+						"</style>"+
 						"</head>"+
 						"<body style='margin-left:20px;'>"+
 						"<h1>Welcome, " + cookies[0].getValue() + "</h1>"+
@@ -83,7 +83,7 @@ public class AdminServlet extends HttpServlet {
 						"<form method='get' action=CreateUserServlet>" +
 						"  <input type='submit' value='Create New User' class='Buttons'>"+
 						"</form>" +
-						"<form style='position:fixed;bottom:60%;width:10%;' method='post' action='LogoutServlet'>"+
+						"<form style='position:fixed;width:10%;' method='post' action='LogoutServlet'>"+
 						"  <input type='submit' name='logout' value='Logout' class='Buttons'>"+
 						"</form>"+
 						"</body>"+
