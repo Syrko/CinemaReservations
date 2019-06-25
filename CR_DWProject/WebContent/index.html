@@ -2,10 +2,31 @@
 <html>
 <head>
 <title> Login </title>
+<style>
+body{
+  background-color: #1A1A1D;
+  color: #EEF4ED;
+  font-size:18px;
+}
+input{
+  background-color: #950740;
+  color: white;
+  text-align: center;
+  border: none;
+  height: 25px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.Buttons:hover {background-color: #950740; cursor: pointer;}
+.Buttons{background-color: #C3073F; color: white; padding: 10px; font-size: 14px; border: none; width:auto; height: auto;}
+h1{border: none; padding: 2%; color:white; background-color: #6F2232; min-height: 20px; font-size: 33px;}
+
+
+</style>
 </head>
 <body>
-<h2 style="text-align:center; font-size:50px">Login</h2>
-<h3 style="text-align:center; font-size:25px">Welcome to Cinema Reservations</h3>
+<h1 style="text-align:center; font-size:50px">Login</h1>
+<h3 style="text-align:center; font-size:30px">Welcome to Cinema Reservations</h3>
 
 <div style="text-align:center">
   <form action="LoginServlet" method="post">
@@ -14,8 +35,8 @@
     	<input type="text" name="username"><br><br>
     	Password:<br>
     	<input type="password" name="password"><br><br>
-    	<button type="reset" value="Cancel">Cancel</button>
-   	 	<input type="submit" value="Login">
+    	<button type="reset" value="Cancel" class="Buttons">Cancel</button>
+   	 	<input type="submit" value="Login" class="Buttons">
     </fieldset>
   </form>
 

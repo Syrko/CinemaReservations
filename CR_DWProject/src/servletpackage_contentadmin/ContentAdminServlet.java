@@ -23,7 +23,7 @@ public class ContentAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
-     * Default constructor. 
+     * Default constructor.
      */
     public ContentAdminServlet() {
         // TODO Auto-generated constructor stub
@@ -43,9 +43,9 @@ public class ContentAdminServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-	
-	private void ShowContentAdmBasic(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException 
+
+	private void ShowContentAdmBasic(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException
 	{
 		Cookie[] cookies = CookieManager.getCookies(request);
 		if(cookies == null || !cookies[1].getValue().equals("contentAdmin")) {
@@ -53,7 +53,7 @@ public class ContentAdminServlet extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_FORBIDDEN);
 			return;
 		}
-		
+
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		out.println(
@@ -61,31 +61,48 @@ public class ContentAdminServlet extends HttpServlet {
 				"<html>" +
 				"<head>" +
 				"	<title>Content Admin</title>" +
-				"	<h1>Welcome, " + cookies[0].getValue() + "!</h1>" + 
-				"	<h2>You are in the Content Admin page!</h2><br>" +
 				"	<style>" +
+				"body{"+
+				"  background-color: #1A1A1D;"+
+				"  color: #EEF4ED;"+
+				"  font-size:18px;"+
+				"}"+
+				"select{"+
+				"  background-color: #950740;"+
+				"  color: white;"+
+				"  text-align: center;"+
+				"  border: none;"+
+				"  height: 25px;"+
+				"  margin-top: 5px;"+
+				"  margin-bottom: 5px;"+
+				"}"+
+				".Buttons:hover {background-color: #950740; cursor: pointer;}"+
+				".Buttons{background-color: #C3073F; color: white; padding: 10px; font-size: 14px; border: none; margin-bottom: 80px; width:auto; height: auto;}"+
+				"form{margin-left:30px;}"+
+				"h1{border: none; padding: 2%; color:white; background-color: #6F2232; min-height: 20px; font-size: 33px;}"+
 				"	</style>" +
 				"</head>" +
 				"<body>" +
+				"	<h1>Welcome, " + cookies[0].getValue() + "!</h1>" +
+				"	<h2>You are in the Content Admin page!</h2><br>" +
 				" <form style='float: left' action='contentAdminSelectMovie' method='get'>" +
 				"    <select name='movies'>");
 		ArrayList<Film> films = Database.getAllFilms();
 		for(Film film : films) {
 			out.println("<option value='" + film.getFilmID() + "'>" + film.getFilmTitle() + "</option>");
 		}
-		out.println(	
+		out.println(
 				"	</select>" +
-				"   <input type='submit' value='View Info'>" +
+				"   <input type='submit' value='View Info' class='Buttons'>" +
 				"  </form>" +
-				"<br><br><br>" +
 				"	<form action='contentAdminAddMovie' method='post'>" +
-				"		<input type='submit' value='Add Movie'>" +
+				"		<input type='submit' value='Add Movie' class='Buttons'>" +
 				"	</form>" +
-				"<form style='position:fixed;left:5%;bottom:10%;width:10%;' method='post' action='LogoutServlet'>" +
-				"  <input type='submit' name='logout' value='Logout'>" +
+				"<form style='position:fixed;bottom:10%;width:10%;' method='post' action='LogoutServlet'>" +
+				"  <input type='submit' name='logout' value='Logout' class='Buttons'>" +
 				"</form>" +
 				"</body>" +
-				"</html>");		
+				"</html>");
 	}
 
 }

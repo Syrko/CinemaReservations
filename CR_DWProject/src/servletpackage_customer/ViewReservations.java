@@ -22,7 +22,7 @@ import databasepackage.Database;
 @WebServlet("/ViewReservations")
 public class ViewReservations extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -43,14 +43,29 @@ public class ViewReservations extends HttpServlet {
 		}
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
-		
+
 		Customer customer = (Customer)(Database.getUser(cookies[0].getValue(), cookies[1].getValue()));
-		
+
 		out.println(
 				"<!DOCTYPE html>"+
 						"<html>"+
 						"<head>"+
 						"<title>Your Reservations</title>"+
+						"<style>"+
+						"body{"+
+						"  background-color: #1A1A1D;"+
+						"  color: #EEF4ED;"+
+						"  font-size:18px;"+
+						"}"+
+						".Buttons:hover {background-color: #950740; cursor: pointer;}"+
+						".Buttons{background-color: #C3073F; color: white; padding: 10px; font-size: 14px; border: none; margin-bottom: 80px; width:auto; height: auto;}"+
+						"form{margin-left:30px;}"+
+						"h1{border: none; padding: 2%; color:white; background-color: #6F2232; min-height: 20px; font-size: 33px;}"+
+						"table{width:50%; border-collapse: collapse; text-align:left; border: 2px solid; margin-left:15px;}"+
+						"th{background-color: #6F2232; padding-top:10px; padding-bottom: 10px; border: 1px solid white; text-align: center;}"+
+						"td{border: 1px solid white; text-indent: 5px;}"+
+						"tr{border: 1px solid;}"+
+						"</style>"+
 						"</head>"+
 						"<body style='margin-left:20px;'>"+
 						"<h1>Your Reservations:</h1>"+
@@ -64,7 +79,7 @@ public class ViewReservations extends HttpServlet {
 						"  </tr>");
 		ArrayList<Reservation> reservations = Database.getReservationsForCustomer(customer.getUsername());
 		for(Reservation reservation: reservations) {
-			
+
 			out.println("  <tr style='border: 1px solid;'>");
 			out.println("<td>" + reservation.getReservationID() + "</td>");
 			out.println("<td>" + reservation.getProvoli().getProvoliFilm().getFilmID() + "</td>");
@@ -77,10 +92,10 @@ public class ViewReservations extends HttpServlet {
 						"</table>"+
 						"<br><br>"+
 						"<form method='post' action='CustomerServlet'>"+
-						"  <input type='submit' value='Return'>"+
+						"  <input type='submit' value='Return' class='Buttons'>"+
 						"</form>"+
 						"<form style='margin-top:100px;width:10%;' method='post' action='LogoutServlet'>"+
-						"  <input type='submit' name='logout' value='Logout'>"+
+						"  <input type='submit' name='logout' value='Logout' class='Buttons'>"+
 						"</form>"+
 						"</body>"+
 						"</html>"

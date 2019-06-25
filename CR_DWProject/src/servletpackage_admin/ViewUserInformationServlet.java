@@ -20,7 +20,7 @@ import userspackage.*;
 @WebServlet("/ViewUserInformationServlet")
 public class ViewUserInformationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -39,10 +39,10 @@ public class ViewUserInformationServlet extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_FORBIDDEN);
 			return;
 		}
-		
+
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
-		
+
 		String username = request.getParameter("username");
 		if(Database.userExists(username).equals("&no_user")) {
 			out.println(
@@ -50,6 +50,16 @@ public class ViewUserInformationServlet extends HttpServlet {
 							"<html>"+
 							"<head>"+
 							"<title>User Details</title>"+
+							"<style>"+
+							"  body{"+
+							"    background-color: #1A1A1D;"+
+							"    color: #EEF4ED;"+
+							"    font-size:18px;"+
+							"  }"+
+							"h1{border: none; padding: 2%; color:white; background-color: #6F2232; min-height: 20px; font-size: 33px;}"+
+							".Buttons:hover {background-color: #950740; cursor: pointer;}"+
+							".Buttons{background-color: #C3073F; color: white; padding: 10px; font-size: 14px; border: none; margin-bottom: 80px; width:auto; height: auto; margin-left:30px;}"+
+							"</style>"+
 							"</head>"+
 							"<body>"+
 							"<h1>No user '" + username + "' was found!" +
@@ -70,9 +80,34 @@ public class ViewUserInformationServlet extends HttpServlet {
 							"<html>"+
 							"<head>"+
 							"<title>User Details</title>"+
-							"<h1>View User Details</h1><br>"+
+							"<style>"+
+							"body{"+
+							"  background-color: #1A1A1D;"+
+							"  color: #EEF4ED;"+
+							"  font-size:18px;"+
+							"}"+
+							"input{"+
+							"  background-color: #950740;"+
+							"  color: white;"+
+							"  text-align: center;"+
+							"  border: none;"+
+							"  height: 25px;"+
+							"  margin-top: 5px;"+
+							"  margin-bottom: 5px;"+
+							"}"+
+							"textarea{"+
+							"  background-color: #4E4E50;"+
+							"  color:white;"+
+							"  text-indent: 5px;"+
+							"}"+
+							".Buttons:hover {background-color: #950740; cursor: pointer;}"+
+							".Buttons{background-color: #C3073F; color: white; padding: 10px; font-size: 14px; border: none; margin-bottom: 80px; width:auto; height: auto;}"+
+							"form{margin-left:30px;}"+
+							"h1{border: none; padding: 2%; color:white; background-color: #6F2232; min-height: 20px; font-size: 33px;}"+
+							"</style>"+
 							"</head>"+
 							"<body>"+
+							"<h1>View User Details</h1><br>"+
 							"<form>"+
 							"  <textarea rows='15' cols='50' readonly=true; margin=auto; style='resize:none;'>"+
 							"Name: " + customer.getName()+"\n"+
@@ -89,16 +124,16 @@ public class ViewUserInformationServlet extends HttpServlet {
 							"<form method='post' action='EditUserServlet'>"+
 							"  <input type='hidden' name='username' value='" + customer.getUsername() + "'>"+
 							"  <input type='hidden' name='usertype' value='customer'>"+
-							"  <input type='submit' value='Edit User'>"+
+							"  <input type='submit' value='Edit User' class='Buttons'>"+
 							"</form>"+
 							"<br>"+
 							"<form method='post' action='DeleteUserServlet'>"+
 							"  <input type='hidden' name='username' value='" + customer.getUsername() + "'>"+
 							"  <input type='hidden' name='usertype' value='customer'>"+
-							"  <input type='submit' value='Delete User'>"+
+							"  <input type='submit' value='Delete User' class='Buttons'>"+
 							"</form>"+
 							"<form style='position:fixed;bottom:10%;width:10%;' method='post' action='LogoutServlet'>"+
-							"  <input type='submit' name='logout' value='Logout'>"+
+							"  <input type='submit' name='logout' value='Logout' class='Buttons'>"+
 							"</form>"+
 							"</body>"+
 							"</html>");
@@ -111,9 +146,34 @@ public class ViewUserInformationServlet extends HttpServlet {
 							"<html>"+
 							"<head>"+
 							"<title>User Details</title>"+
-							"<h1>View User Details</h1><br>"+
+							"<style>"+
+							"body{"+
+							"  background-color: #1A1A1D;"+
+							"  color: #EEF4ED;"+
+							"  font-size:18px;"+
+							"}"+
+							"input{"+
+							"  background-color: #950740;"+
+							"  color: white;"+
+							"  text-align: center;"+
+							"  border: none;"+
+							"  height: 25px;"+
+							"  margin-top: 5px;"+
+							"  margin-bottom: 5px;"+
+							"}"+
+							"textarea{"+
+							"  background-color: #4E4E50;"+
+							"  color:white;"+
+							"  text-indent: 5px;"+
+							"}"+
+							".Buttons:hover {background-color: #950740; cursor: pointer;}"+
+							".Buttons{background-color: #C3073F; color: white; padding: 10px; font-size: 14px; border: none; margin-bottom: 80px; width:auto; height: auto;}"+
+							"form{margin-left:30px;}"+
+							"h1{border: none; padding: 2%; color:white; background-color: #6F2232; min-height: 20px; font-size: 33px;}"+
+							"</style>"+
 							"</head>"+
 							"<body>"+
+							"<h1>View User Details</h1><br>"+
 							"<form>"+
 							"  <textarea rows='15' cols='50' readonly=true; margin=auto; style='resize:none;'>"+
 							"Name: " + contentAdmin.getName()+"\n"+
@@ -130,22 +190,22 @@ public class ViewUserInformationServlet extends HttpServlet {
 							"<form method='post' action='EditUserServlet'>"+
 							"  <input type='hidden' name='username' value='" + contentAdmin.getUsername() + "'>"+
 							"  <input type='hidden' name='usertype' value='contentadmin'>"+
-							"  <input type='submit' value='Edit User'>"+
+							"  <input type='submit' value='Edit User' class='Buttons'>"+
 							"</form>"+
 							"<br>"+
 							"<form method='post' action='DeleteUserServlet'>"+
 							"  <input type='hidden' name='username' value='" + contentAdmin.getUsername() + "'>"+
 							"  <input type='hidden' name='usertype' value='contentadmin'>"+
-							"  <input type='submit' value='Delete User'>"+
+							"  <input type='submit' value='Delete User' class='Buttons'>"+
 							"</form>"+
 							"<form style='position:fixed;bottom:35%;width:10%;' method='post' action='LogoutServlet'>"+
-							"  <input type='submit' name='logout' value='Logout'>"+
+							"  <input type='submit' name='logout' value='Logout' class='Buttons'>"+
 							"</form>"+
 							"</body>"+
-							"</html>");	
+							"</html>");
 							return;
 		}
-		
+
 	}
 
 	/**

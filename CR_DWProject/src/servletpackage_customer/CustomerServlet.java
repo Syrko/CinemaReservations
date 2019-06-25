@@ -21,7 +21,7 @@ import databasepackage.Database;
 @WebServlet("/CustomerServlet")
 public class CustomerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -42,18 +42,38 @@ public class CustomerServlet extends HttpServlet {
 		}
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
-		
+
 		out.print(
 				"<!DOCTYPE html>"+
 						"<html>"+
 						"<head>"+
 						"<title>Customer</title>"+
+						"<style>"+
+						"body{"+
+						"  background-color: #1A1A1D;"+
+						"  color: #EEF4ED;"+
+						"  font-size:18px;"+
+						"}"+
+						"input, select{"+
+						"  background-color: #950740;"+
+						"  color: white;"+
+						"  text-align: center;"+
+						"  border: none;"+
+						"  height: 25px;"+
+						"  margin-top: 5px;"+
+						"  margin-bottom: 5px;"+
+						"}"+
+						".Buttons:hover {background-color: #950740; cursor: pointer;}"+
+						".Buttons{background-color: #C3073F; color: white; padding: 10px; font-size: 14px; border: none; margin-bottom: 80px; width:auto; height: auto;}"+
+						"form{margin-left:30px;}"+
+						"h1{border: none; padding: 2%; color:white; background-color: #6F2232; min-height: 20px; font-size: 33px;}"+
+						"</style>"+
 						"</head>"+
 						"<body style='margin-left:20px;'>"+
 						"<h1>Welcome, " + cookies[0].getValue() + "</h1>"+
 						"<h2>Click here to view your reservations:</h2>"+
 						"<form method='post' action='ViewReservations'>"+
-						"  <input type='submit' value='My Reservations'>"+
+						"  <input type='submit' value='My Reservations' class='Buttons'>"+
 						"</form>"+
 						"<br>"+
 						"<h2>Choose the movie you want to make a reservation for:</h2>"+
@@ -63,12 +83,12 @@ public class CustomerServlet extends HttpServlet {
 		for(Film film : films) {
 			out.println("<option value='" + film.getFilmID() + "'>" + film.getFilmTitle() + "</option>");
 		}
-		out.println(	
+		out.println(
 						"</select>"+
-						"<input type='submit' value='Make Reservation' style='margin-left:20px;'>"+
+						"<input type='submit' value='Make Reservation' style='margin-left:20px;' class='Buttons'>"+
 						"</form>"+
 						"<form style='margin-top:100px;width:10%;' method='post' action='LogoutServlet'>"+
-						"  <input type='submit' name='logout' value='Logout'>"+
+						"  <input type='submit' name='logout' value='Logout' class='Buttons'>"+
 						"</form>"+
 						"</body>"+
 						"</html>"

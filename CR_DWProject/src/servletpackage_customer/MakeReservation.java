@@ -23,7 +23,7 @@ import userspackage.Customer;
 @WebServlet("/MakeReservation")
 public class MakeReservation extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -44,15 +44,44 @@ public class MakeReservation extends HttpServlet {
 		}
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
-		
+
 		Customer customer = (Customer)(Database.getUser(cookies[0].getValue(), cookies[1].getValue()));
 		Film film = Database.getFilm(request.getParameter("movies"));
-		
+
 		out.println(
 				"<!DOCTYPE html>"+
 						"<html>"+
 						"<head>"+
 						"<title>View Provoles</title>"+
+						"<style>"+
+						"body{"+
+						"  background-color: #1A1A1D;"+
+						"  color: #EEF4ED;"+
+						"  font-size:18px;"+
+						"}"+
+						"input, select{"+
+						"  background-color: #950740;"+
+						  "color: white;"+
+						"  text-align: center;"+
+						"  border: none;"+
+						"  height: 25px;"+
+						"  margin-top: 5px;"+
+						"  margin-bottom: 5px;"+
+						"}"+
+						"textarea{"+
+						"  background-color: #4E4E50;"+
+						"  color:white;"+
+						"  text-indent: 5px;"+
+						"}"+
+						".Buttons:hover {background-color: #950740; cursor: pointer;}"+
+						".Buttons{background-color: #C3073F; color: white; padding: 10px; font-size: 14px; border: none; margin-bottom: 80px; width:auto; height: auto;}"+
+						"form{margin-left:30px;}"+
+						"h1{border: none; padding: 2%; color:white; background-color: #6F2232; min-height: 20px; font-size: 33px;}"+
+						"table{width:50%; border-collapse: collapse; text-align:left; border: 2px solid; margin-left:15px;}"+
+						"th{background-color: #6F2232; padding-top:10px; padding-bottom: 10px; border: 1px solid white; text-align: center;}"+
+						"td{border: 1px solid white; text-indent: 5px;}"+
+						"tr{border: 1px solid;}"+
+						"</style>"+
 						"</head>"+
 						"<body style='margin-left:20px;'>"+
 						"<h1>Available Provoles for: " + film.getFilmTitle() + " </h1>"+
@@ -97,11 +126,11 @@ public class MakeReservation extends HttpServlet {
 						"  Choose number of tickets:"+
 						"  <input type='number' name='numberOfTickets' min='1'>"+
 						"  <br><br>"+
-						"  <input type='Submit' value='Book it!'>"+
+						"  <input type='Submit' value='Book it!' class='Buttons'>"+
 						"</form>"+
 
 						"<form style='margin-top:100px;width:10%;' method='post' action='LogoutServlet'>"+
-						"  <input type='submit' name='logout' value='Logout'>"+
+						"  <input type='submit' name='logout' value='Logout' class='Buttons'>"+
 						"</form>"+
 
 						"<script>"+

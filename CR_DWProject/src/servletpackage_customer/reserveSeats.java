@@ -22,7 +22,7 @@ import userspackage.Customer;
 @WebServlet("/reserveSeats")
 public class reserveSeats extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -43,23 +43,33 @@ public class reserveSeats extends HttpServlet {
 		}
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
-		
+
 		Customer customer = (Customer)(Database.getUser(cookies[0].getValue(), cookies[1].getValue()));
 		Provoli provoli = Database.getProvoli(request.getParameter("provoli"));
 		LocalDate date = LocalDate.parse(request.getParameter("date"));
 		int numberOfTickets = Integer.parseInt(request.getParameter("numberOfTickets"));
-		
+
 		if(date.isBefore(provoli.getProvoliStartDate_d()) || date.isAfter(provoli.getProvoliEndDate_d())) {
 			out.println(
 					"<!DOCTYPE html>"+
 							"<html>"+
 							"<head>"+
 							"<title>Error</title>"+
+							"<style>"+
+							"body{"+
+							"  background-color: #1A1A1D;"+
+							"  color: #EEF4ED;"+
+							"  font-size:18px;"+
+							"}"+
+							".Buttons:hover {background-color: #950740; cursor: pointer;}"+
+							".Buttons{background-color: #C3073F; color: white; padding: 10px; font-size: 14px; border: none; margin-bottom: 80px; margin-left:20px; width:auto; height: auto;}"+
+							"h1{border: none; padding: 2%; color:white; background-color: #6F2232; min-height: 20px; font-size: 33px;}"+
+							"</style>"+
 							"</head>"+
 							"<body style='margin-left:20px;'>"+
 							"<h1>Your Reservation was not completed!</h1><h2 style='color:red'> Please enter valid Provoli dates.</h2>"+
 							"<form method='get' action='CustomerServlet'>"+
-							"  <input type='submit' value='Return'>"+
+							"  <input type='submit' value='Return' class='Buttons'>"+
 							"</form>"+
 							"</body>"+
 							"</html>"
