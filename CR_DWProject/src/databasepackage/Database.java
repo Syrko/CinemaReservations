@@ -125,11 +125,11 @@ public final class Database {
 	public synchronized static void UpdateProvolesAvailability() {
 		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")){
 			{
-				String statement = "UPDATE provoli SET provoliIsAvailable=true WHERE provoliStartDate<=now() AND provoliEndDate>=now()";
+				String statement = "UPDATE provoli SET provoliIsAvailable=true WHERE provoliEndDate>=now()";
 				PreparedStatement dbStatement = db.prepareStatement(statement);
 				dbStatement.executeUpdate();}
 			{
-				String statement = "UPDATE provoli SET provoliIsAvailable=false WHERE provoliStartDate>now() AND provoliEndDate<now()";
+				String statement = "UPDATE provoli SET provoliIsAvailable=false WHERE provoliEndDate<now()";
 				PreparedStatement dbStatement = db.prepareStatement(statement);
 				dbStatement.executeUpdate();
 			}
@@ -166,9 +166,14 @@ public final class Database {
 				PreparedStatement dbStatement = db.prepareStatement(statement);
 				ResultSet rs = dbStatement.executeQuery();
 				ArrayList<Integer> ids = new ArrayList<Integer>();
+				
 				while(rs.next()) {
 					ids.add(Integer.parseInt(rs.getString("filmid").substring(2)));
 				}
+				if(ids.isEmpty()) {
+					id = 1;
+				}
+				else {
 				Collections.sort(ids);
 				Integer counter = 0;
 				while(true) {
@@ -181,6 +186,7 @@ public final class Database {
 						id = counter;
 						break;
 					}
+				}
 				}
 			}
 			String statement = "INSERT INTO film VALUES(?, ?, ?, ?)";
@@ -225,9 +231,14 @@ public final class Database {
 				PreparedStatement dbStatement = db.prepareStatement(statement);
 				ResultSet rs = dbStatement.executeQuery();
 				ArrayList<Integer> ids = new ArrayList<Integer>();
+				
 				while(rs.next()) {
 					ids.add(Integer.parseInt(rs.getString("provoliid").substring(2)));
 				}
+				if(ids.isEmpty()) {
+					id=1;
+				}
+				else {
 				Collections.sort(ids);
 				Integer counter = 0;
 				while(true) {
@@ -241,6 +252,7 @@ public final class Database {
 						break;
 					}
 				}		
+				}
 			}
 			
 			String statement = "INSERT INTO provoli VALUES(?, ?, ?, ?, ?, ?, ?)";
@@ -328,24 +340,6 @@ public final class Database {
 				else
 					return "&no_user";
 			}
-//			String user = rs.getString("username");
-//			if(user.equals(null)) {
-//				statement = "SELECT * FROM customer WHERE username=?"; 
-//				dbStatement = db.prepareStatement(statement);
-//				dbStatement.setString(1, username);
-//				rs = dbStatement.executeQuery();
-//				rs.next();
-//				user = rs.getString("username");
-//				if(user.equals(null)) {
-//					return "&no_user";
-//				}
-//				else {
-//					return "customer";
-//				}
-//			}
-//			else{
-//				return "contentadmin";
-//			}
 		}
 		catch(SQLException e) {
 			System.out.println("userExists: " + e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
@@ -458,5 +452,103 @@ public final class Database {
 			return false;
 		}
 		
+	}
+	
+	public synchronized static ArrayList<Reservation> getReservationsForCustomer(String customerID) {
+		deleteExpiredReservations();
+		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")) {
+			ArrayList<Reservation> returnList = new ArrayList<Reservation>();
+			
+			String statement = "SELECT * FROM reservation WHERE customer=?"; 
+			PreparedStatement dbStatement = db.prepareStatement(statement);
+			dbStatement.setString(1, customerID);
+			ResultSet rs = dbStatement.executeQuery();
+			
+			while(rs.next()) {
+				returnList.add(new Reservation(rs.getString("reservationID"), getProvoli(rs.getString("provoli")), rs.getInt("numberofseats"), rs.getDate("reservationDate").toLocalDate(), (Customer)getUser(rs.getString("customer"), "customer")));
+			}
+			return returnList;
+		}
+		catch(SQLException e) {
+			System.out.println("getReservationsForCustomer: " + e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			return null;
+		}
+	}
+	
+	public synchronized static void makeReservation(String provoliID, int NumberOfSeats, LocalDate date, String customerUsername) {
+		deleteExpiredReservations();
+		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")) {			
+			Integer reservationID;
+			{
+				String statement = "SELECT reservationid FROM reservation";
+				PreparedStatement dbStatement = db.prepareStatement(statement);
+				ResultSet rs = dbStatement.executeQuery();
+				ArrayList<Integer> ids = new ArrayList<Integer>();
+				
+				while(rs.next()) {
+					ids.add(Integer.parseInt(rs.getString("reservationid").substring(2)));
+				}
+				if(ids.isEmpty())
+					reservationID = 1;
+				else {
+				Collections.sort(ids);
+				Integer counter = 0;
+				while(true) {
+					counter++;
+					if(counter>ids.size()) {
+						reservationID = (ids.get(ids.size()-1)+1);
+						break;
+					}
+					if(!counter.equals(ids.get(counter-1))) {
+						reservationID = counter;
+						break;
+					}
+				}		
+				}
+			}
+			
+			String statement = "INSERT INTO reservation VALUES(?, ?, ?, ?, ?)"; 
+			PreparedStatement dbStatement = db.prepareStatement(statement);
+			dbStatement.setString(1, "R-" + reservationID.toString());
+			dbStatement.setString(2, provoliID);
+			dbStatement.setInt(3, NumberOfSeats);
+			dbStatement.setDate(4, java.sql.Date.valueOf(date));
+			dbStatement.setString(5, customerUsername);
+			dbStatement.executeUpdate();
+		}
+		catch(SQLException e) {
+			System.out.println("makeReservation: " + e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			return;
+		}
+	}
+	
+	public synchronized static void deleteExpiredReservations() {
+		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")) {			
+			String statement = "DELETE FROM reservation WHERE reservationdate<=now()-interval '1 day'"; 
+			PreparedStatement dbStatement = db.prepareStatement(statement);
+			dbStatement.executeUpdate();
+		}
+		catch(SQLException e) {
+			System.out.println("deleteExpiredReservation: " + e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			return;
+		}
+	}
+	
+	public synchronized static int getReservedSeats(Provoli provoli) {
+		try(Connection db = DriverManager.getConnection("jdbc:postgresql://localhost:5432/cinemaReservationsDB", "postgres", "admin")) {			
+			String statement = "SELECT SUM(numberofseats) AS res_seats FROM reservation WHERE provoli=?"; 
+			PreparedStatement dbStatement = db.prepareStatement(statement);
+			dbStatement.setString(1, provoli.getProvoliID());
+			ResultSet rs = dbStatement.executeQuery();
+			if(rs.next()) {
+				return rs.getInt("res_seats");
+			}
+			else
+				return -200000;
+		}
+		catch(SQLException e) {
+			System.out.println("getReservedSeats: " + e.getErrorCode() + " -- "+ e.getCause() + " -- "+e.getMessage());
+			return -1000000;
+		}
 	}
 }

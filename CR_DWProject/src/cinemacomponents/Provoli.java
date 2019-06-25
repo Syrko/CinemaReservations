@@ -5,6 +5,8 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import databasepackage.Database;
+
 public class Provoli {
 	
 	private String provoliID;
@@ -71,6 +73,15 @@ public class Provoli {
 			this.provoliIsAvailable = false;
 	}
 	
+	// Calculates available seats for reservations
+	public int calculateAvailableSeats() {
+		int availableSeats = this.getProvoliCinema().getCinemaNumberOfSeats();
+		int reservedSeats = Database.getReservedSeats(this);
+		if(reservedSeats>=0)
+			availableSeats -= Database.getReservedSeats(this);
+		return availableSeats;
+	}
+	
 	// Getters
 	public String getProvoliID() {return provoliID;}
 	public Film getProvoliFilm() {return provoliFilm;}	
@@ -79,6 +90,9 @@ public class Provoli {
 	public String getProvoliEndDate() {return provoliEndDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));}	
 	public int getProvoliNumberOfReservations() {return provoliNumberOfReservations;}	
 	public boolean getProvoliIsAvailable() {return provoliIsAvailable;}
+	
+	public LocalDate getProvoliStartDate_d() {return provoliStartDate;}	
+	public LocalDate getProvoliEndDate_d() {return provoliEndDate;}
 	
 	// Setters
 	public void setProvoliID(String provoliID) {this.provoliID = provoliID;}	

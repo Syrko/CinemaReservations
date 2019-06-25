@@ -50,6 +50,25 @@ public class contentAdminAssignMovie extends HttpServlet {
 						"<head>" +
 						"<title>Assign</title>" +
 						"<h1>Assign Movie to Cinema</h1>" +
+						"<style>"+
+						"body{"+
+						"  background-color: #1A1A1D;"+
+						"  color: #EEF4ED;"+
+						"  font-size:18px;"+
+						"}"+
+						"input, select{"+
+						"  background-color: #950740;"+
+						"  color: white;"+
+						"  text-align: center;"+
+						"  border: none;"+
+						"  height: 30px;"+
+						"}"+
+						"form{margin-left:30px;}"+
+						".Buttons:hover {background-color: #950740; cursor: pointer;}"+
+						".Buttons{background-color: #C3073F; color: white; padding: 10px; font-size: 14px; border: none; margin-bottom: 80px; width:80px; height: 35px;}"+
+						"select{border: none;}"+
+						"h1{border: none; padding: 2%; color:white; background-color: #6F2232; min-height: 20px; font-size: 33px;}"+
+						"</style>" +
 						"</head>" +
 						"<body style='margin-left:30px;'>" +
 
@@ -74,8 +93,8 @@ public class contentAdminAssignMovie extends HttpServlet {
 								"  <br>" +
 								"  <br>" +
 								"	<input type='hidden' name='filmid' value='" + request.getParameter("filmid") + "'>" +
-								"  <input type='reset' value='Clear'>" +
-								"  <input type='submit' value='Add' style='margin-left:10px;'>" +
+								"  <input class='Buttons' type='reset' value='Clear'>" +
+								"  <input class='Buttons' type='submit' value='Add' style='margin-left:10px;'>" +
 								"</form>" +
 
 								"<script>" +
@@ -92,7 +111,7 @@ public class contentAdminAssignMovie extends HttpServlet {
 								"  document.getElementById('start').defaultValue = y + '-' + m + '-' +  d;" +
 								"</script>" +
 								"<form style='position:fixed;left:5%;bottom:10%;width:10%;' method='post' action='LogoutServlet'>" +
-								"  <input type='submit' name='logout' value='Logout'>" +
+								"  <input class='Buttons' type='submit' name='logout' value='Logout'>" +
 								"</form>" +
 								"</body>" +
 								"</html>");
