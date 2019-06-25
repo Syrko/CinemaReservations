@@ -67,7 +67,6 @@ public class contentAdminSelectMovie extends HttpServlet {
 						"textarea{"+
 						"  background-color: #4E4E50;"+
 						"  color:white;"+
-						"  text-indent: 5px;"+
 						"}"+
 						".Buttons:hover {background-color: #950740; cursor: pointer;}"+
 						".Buttons{background-color: #C3073F; color: white; padding: 10px; font-size: 14px; border: none; margin-bottom: 50px; width:auto; height: auto;}"+

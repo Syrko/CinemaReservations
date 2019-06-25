@@ -62,7 +62,7 @@ public class ViewUserInformationServlet extends HttpServlet {
 							"</style>"+
 							"</head>"+
 							"<body>"+
-							"<h1>No user '" + username + "' was found!" +
+							"<h1>No user '" + username + "' was found!</h1>" +
 							"<form method='get' action='AdminServlet'>"+
 							"<input type='submit' value='Try Again' class='Buttons'>" +
 							"</form>"+
@@ -98,10 +98,9 @@ public class ViewUserInformationServlet extends HttpServlet {
 							"textarea{"+
 							"  background-color: #4E4E50;"+
 							"  color:white;"+
-							"  text-indent: 5px;"+
 							"}"+
 							".Buttons:hover {background-color: #950740; cursor: pointer;}"+
-							".Buttons{background-color: #C3073F; color: white; padding: 10px; font-size: 14px; border: none; margin-bottom: 80px; width:auto; height: auto;}"+
+							".Buttons{background-color: #C3073F; color: white; padding: 10px; font-size: 14px; border: none; margin-bottom: 40px; width:auto; height: auto;}"+
 							"form{margin-left:30px;}"+
 							"h1{border: none; padding: 2%; color:white; background-color: #6F2232; min-height: 20px; font-size: 33px;}"+
 							"</style>"+
@@ -110,6 +109,7 @@ public class ViewUserInformationServlet extends HttpServlet {
 							"<h1>View User Details</h1><br>"+
 							"<form>"+
 							"  <textarea rows='15' cols='50' readonly=true; margin=auto; style='resize:none;'>"+
+							"Type: Customer\n" +
 							"Name: " + customer.getName()+"\n"+
 							"Username: " + customer.getUsername()+"\n"+
 							"Password: ");
@@ -132,7 +132,7 @@ public class ViewUserInformationServlet extends HttpServlet {
 							"  <input type='hidden' name='usertype' value='customer'>"+
 							"  <input type='submit' value='Delete User' class='Buttons'>"+
 							"</form>"+
-							"<form style='position:fixed;bottom:10%;width:10%;' method='post' action='LogoutServlet'>"+
+							"<form method='post' action='LogoutServlet'>"+
 							"  <input type='submit' name='logout' value='Logout' class='Buttons'>"+
 							"</form>"+
 							"</body>"+
@@ -164,7 +164,6 @@ public class ViewUserInformationServlet extends HttpServlet {
 							"textarea{"+
 							"  background-color: #4E4E50;"+
 							"  color:white;"+
-							"  text-indent: 5px;"+
 							"}"+
 							".Buttons:hover {background-color: #950740; cursor: pointer;}"+
 							".Buttons{background-color: #C3073F; color: white; padding: 10px; font-size: 14px; border: none; margin-bottom: 40px; width:auto; height: auto;}"+
@@ -176,6 +175,7 @@ public class ViewUserInformationServlet extends HttpServlet {
 							"<h1>View User Details</h1><br>"+
 							"<form>"+
 							"  <textarea rows='15' cols='50' readonly=true; margin=auto; style='resize:none;'>"+
+							"Type: Content Admin\n" +
 							"Name: " + contentAdmin.getName()+"\n"+
 							"Username: " + contentAdmin.getUsername()+"\n"+
 							"Password: ");
@@ -198,7 +198,7 @@ public class ViewUserInformationServlet extends HttpServlet {
 							"  <input type='hidden' name='usertype' value='contentadmin'>"+
 							"  <input type='submit' value='Delete User' class='Buttons'>"+
 							"</form>"+
-							"<form style='position:fixed;width:10%;' method='post' action='LogoutServlet'>"+
+							"<form method='post' action='LogoutServlet'>"+
 							"  <input type='submit' name='logout' value='Logout' class='Buttons'>"+
 							"</form>"+
 							"</body>"+
