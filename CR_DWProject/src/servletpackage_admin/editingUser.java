@@ -98,10 +98,10 @@ public class editingUser extends HttpServlet {
 							"<body>" +
 							"  <form method='post' action='AdminServlet'> "+
 							"     <h1> User was not edited! </h1>" +
-							"    <input type='submit' value='OK' class='Buttons'>>" +
+							"    <input type='submit' value='OK' class='Buttons'>" +
 							"  </form>" +
 							"<form style='position:fixed;bottom:10%;width:10%;' method='post' action='LogoutServlet'>" +
-							"  <input type='submit' name='logout' value='Logout' class='Buttons'>>" +
+							"  <input type='submit' name='logout' value='Logout' class='Buttons'>" +
 							"</form>" +
 							"</body>" +
 							"</html>");

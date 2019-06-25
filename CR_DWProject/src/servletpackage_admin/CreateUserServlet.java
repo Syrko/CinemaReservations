@@ -85,7 +85,7 @@ public class CreateUserServlet extends HttpServlet {
 						"  <br><br>"+
 						"  Password: <input type='password' placeholder='Input Password' name='password' style='width:100%;' required>"+
 						"  <br><br>"+
-						"  <input type='submit' value='Create User'>"+
+						"  <input type='submit' value='Create User' class='Buttons'>"+
 						"</form>"+
 						"</div>" +
 						"<form style='position:fixed;bottom:10%;width:10%;' method='post' action='LogoutServlet'>"+
