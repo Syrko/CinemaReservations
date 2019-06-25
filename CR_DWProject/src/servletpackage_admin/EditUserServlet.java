@@ -89,10 +89,10 @@ public class EditUserServlet extends HttpServlet {
 						"<input type='hidden' name='usertype' value='"+ request.getParameter("usertype") +"'>" +
 						"<input type='hidden' name='oldUsername' value='"+ user.getUsername() +"'>" +
 						"  <br><br>"+
-						"  <input type='submit' value='Save Changes'>"+
+						"  <input type='submit' value='Save Changes' class='Buttons'>"+
 						"</form>"+
 						"<form style='position:fixed;bottom:10%;width:10%;' method='post' action='LogoutServlet'>"+
-						"  <input type='submit' name='logout' value='Logout'>"+
+						"  <input type='submit' name='logout' value='Logout' class='Buttons'>"+
 						"</form>"+
 						"</body>"+
 						"</html>"

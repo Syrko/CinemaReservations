@@ -64,10 +64,10 @@ public class ViewUserInformationServlet extends HttpServlet {
 							"<body>"+
 							"<h1>No user '" + username + "' was found!" +
 							"<form method='get' action='AdminServlet'>"+
-							"<input type='submit' value='Try Again'>" +
+							"<input type='submit' value='Try Again' class='Buttons'>" +
 							"</form>"+
-							"<form style='position:fixed;bottom:35%;width:10%;' method='post' action='LogoutServlet'>"+
-							"  <input type='submit' name='logout' value='Logout'>"+
+							"<form method='post' action='LogoutServlet'>"+
+							"  <input type='submit' name='logout' value='Logout' class='Buttons'>"+
 							"</form>"+
 							"</body>"+
 							"</html>");
