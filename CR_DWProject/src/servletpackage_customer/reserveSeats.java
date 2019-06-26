@@ -82,12 +82,22 @@ public class reserveSeats extends HttpServlet {
 							"<html>"+
 							"<head>"+
 							"<title>Error</title>"+
+							"<style>"+
+							"body{"+
+							"  background-color: #1A1A1D;"+
+							"  color: #EEF4ED;"+
+							"  font-size:18px;"+
+							"}"+
+							".Buttons:hover {background-color: #950740; cursor: pointer;}"+
+							".Buttons{background-color: #C3073F; color: white; padding: 10px; font-size: 14px; border: none; margin-bottom: 80px; margin-left:20px; width:auto; height: auto;}"+
+							"h1{border: none; padding: 2%; color:white; background-color: #6F2232; min-height: 20px; font-size: 33px;}"+
+							"</style>"+
 							"</head>"+
 							"<body style='margin-left:20px;'>"+
 							"<h1>Your Reservation was not completed.</h1><h2 style='color:red'>There are not enough available seats for your selected Provoli."
 							+ "<br>Please try again...</h2>"+
 							"<form method='get' action='CustomerServlet'>"+
-							"  <input type='submit' value='Return'>"+
+							"  <input type='submit' value='Return' class='Buttons'>"+
 							"</form>"+
 							"</body>"+
 							"</html>"
@@ -100,11 +110,21 @@ public class reserveSeats extends HttpServlet {
 					"<html>"+
 							"<head>"+
 							"<title>Success!</title>"+
+							"<style>"+
+							"body{"+
+							"  background-color: #1A1A1D;"+
+							"  color: #EEF4ED;"+
+							"  font-size:18px;"+
+							"}"+
+							".Buttons:hover {background-color: #950740; cursor: pointer;}"+
+							".Buttons{background-color: #C3073F; color: white; padding: 10px; font-size: 14px; border: none; margin-bottom: 80px; margin-left:20px; width:auto; height: auto;}"+
+							"h1{border: none; padding: 2%; color:white; background-color: #6F2232; min-height: 20px; font-size: 33px;}"+
+							"</style>"+
 							"</head>"+
 							"<body style='margin-left:20px;'>"+
 							"<h1>Your Reservation was completed successfully!</h1>"+
 							"<form method='get' action='CustomerServlet'>"+
-							"  <input type='submit' value='OK!'>"+
+							"  <input type='submit' value='OK!' class='Buttons'>"+
 							"</form>"+
 							"</body>"+
 							"</html>"
